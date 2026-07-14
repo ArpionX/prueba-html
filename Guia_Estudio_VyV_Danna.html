@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V&V Estudio Interactivo — Danna Vera</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Paleta Moradito y Verde Agua (Pastel & Neo-Brutalism híbrido elegante) */
+  --bg: #f9f8fc;
+  --card: #ffffff;
+  --ink: #1e1b4b;
+  --muted: #64748b;
+  
+  --purple-primary: #7c3aed; /* Moradito BTS */
+  --purple-light: #f5f3ff;
+  --purple-border: #ddd6fe;
+  
+  --teal-primary: #0d9488; /* Verde Agua */
+  --teal-light: #f0fdfa;
+  --teal-border: #ccfbf1;
+  
+  --ok: #10b981;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+  --line: #e2e8f0;
+  --shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.05), 0 8px 10px -6px rgba(13, 148, 136, 0.05);
+  --border-radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, var(--purple-primary), var(--teal-primary));
+  color: #fff;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.head-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.head-info h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.head-info p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.progress-container {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 16px;
+  border-radius: 99px;
+  min-width: 250px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.progress-bar span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+/* Layout */
+.layout {
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 30px;
+}
+
+aside {
+  position: sticky;
+  top: 110px;
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+  background: var(--card);
+  border: 1px solid var(--purple-border);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+aside input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--purple-border);
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+aside input:focus {
+  border-color: var(--teal-primary);
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  transition: all 0.2s;
+}
+
+nav a:hover, nav a.active {
+  background-color: var(--purple-light);
+  color: var(--purple-primary);
+  font-weight: 700;
+  transform: translateX(3px);
+}
+
+/* Contenido Principal */
+main {
+  min-width: 0;
+}
+
+section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease;
+}
+
+section:hover {
+  transform: translateY(-2px);
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--purple-primary);
+  border-bottom: 3px solid var(--teal-primary);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+h3 {
+  color: var(--ink);
+  margin: 25px 0 12px 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+p {
+  margin-bottom: 15px;
+  color: var(--muted);
+}
+
+/* Grillas y Tarjetas */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: var(--purple-primary);
+}
+
+.card.teal-card::before {
+  background: var(--teal-primary);
+}
+
+.card h4 {
+  color: var(--ink);
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--purple-light);
+  color: var(--purple-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.tag-teal {
+  background: var(--teal-light);
+  color: var(--teal-primary);
+}
+
+.note {
+  border-left: 5px solid var(--teal-primary);
+  background: var(--teal-light);
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.note-purple {
+  border-left: 5px solid var(--purple-primary);
+  background: var(--purple-light);
+}
+
+/* Tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.95rem;
+}
+
+th, td {
+  border: 1px solid var(--line);
+  padding: 12px 15px;
+  text-align: left;
+}
+
+th {
+  background-color: var(--purple-light);
+  color: var(--purple-primary);
+  font-weight: 700;
+}
+
+/* Código */
+pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  padding: 15px;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  border-left: 4px solid var(--teal-primary);
+  margin: 15px 0;
+}
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Botones interactivos */
+button {
+  background-color: var(--purple-primary);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background-color: #6d28d9;
+  transform: translateY(-1px);
+}
+
+button.secondary {
+  background-color: var(--teal-primary);
+}
+
+button.secondary:hover {
+  background-color: #0f766e;
+}
+
+/* Laboratorios Interactivos */
+.interactive-tool {
+  background: #fafafc;
+  border: 2px dashed var(--purple-border);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.interactive-tool input, .interactive-tool select {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.tool-output {
+  margin-top: 15px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 4px solid var(--teal-primary);
+  font-weight: 600;
+}
+
+/* Quiz interactivo */
+.quiz-question {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.quiz-option {
+  display: block;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.quiz-option:hover {
+  background-color: var(--purple-light);
+}
+
+.quiz-option.correct {
+  background-color: #d1fae5 !important;
+  border-color: #34d399 !important;
+  color: #065f46;
+  font-weight: 700;
+}
+
+.quiz-option.incorrect {
+  background-color: #fee2e2 !important;
+  border-color: #f87171 !important;
+  color: #991b1b;
+}
+
+.feedback-msg {
+  margin-top: 10px;
+  font-weight: 700;
+  display: none;
+}
+
+/* Flashcards */
+.flashcards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+}
+
+.flashcard {
+  width: 100%;
+  max-width: 500px;
+  height: 200px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--purple-border);
+}
+
+.flashcard-front {
+  background: linear-gradient(135deg, var(--purple-light), #fff);
+  color: var(--purple-primary);
+}
+
+.flashcard-back {
+  background: linear-gradient(135deg, var(--teal-light), #fff);
+  color: var(--teal-primary);
+  transform: rotateY(180deg);
+}
+
+/* Footer Motivador */
+footer {
+  text-align: center;
+  padding: 40px;
+  background: var(--ink);
+  color: white;
+  margin-top: 50px;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  aside {
+    position: relative;
+    top: 0;
+    height: auto;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-container">
+    <div class="head-info">
+      <h1>💜 ¡Hola, Danna Vera! Guía Interactiva de V&V</h1>
+      <p>Estudio de Alto Impacto para Software Engineering · Universidad de Guayaquil</p>
+    </div>
+    <div class="progress-container">
+      <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+        <span>Progreso de estudio</span>
+        <span id="pct">0%</span>
+      </div>
+      <div class="progress-bar"><span id="bar"></span></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <input type="text" id="search" placeholder="🔍 Buscar tema...">
+    <nav id="nav">
+      <a href="#intro" class="active">💜 Motivación</a>
+      <a href="#fundamentos">1. Teoría V&V</a>
+      <a href="#caja-negra">2. Caja Negra (Práctica)</a>
+      <a href="#caja-blanca">3. Caja Blanca (Estructura)</a>
+      <a href="#laboratorio">🛠️ Simuladores Prácticos</a>
+      <a href="#evaluacion">✏️ Examen y Quiz</a>
+    </nav>
+  </aside>
+
+  <main id="content">
+    
+    <section id="intro">
+      <h2>¡Tú puedes con esto, Danna!</h2>
+      <p>Sé que a veces la carga académica de la UG se siente pesada y que los diagramas de flujo y las particiones de equivalencia pueden marear. Pero recuerda: <strong>¡eres una excelente desarrolladora junior!</strong> Tienes experiencia en bases de datos, código e interfaces. Esta materia no te va a vencer. 🚀</p>
+      <div class="note note-purple">
+        <strong>💡 Tip de estudio:</strong> Utiliza los simuladores de abajo para comprobar las respuestas de tus talleres prácticos antes de subirlos. ¡A por ese 10/10!
+      </div>
+    </section>
+
+    <section id="fundamentos">
+      <h2>1. Fundamentos de Verificación y Validación</h2>
+      <p>El testing dinámico se ejecuta con el código corriendo, a diferencia del análisis estático. Aquí están las preguntas del millón para tu examen:</p>
+      
+      <div class="grid-cards">
+        <div class="card">
+          <h4>Verificación (¿Cómo?)</h4>
+          <p>Evalúa si el software cumple con los requisitos técnicos de diseño. <em>¿Estamos construyendo el producto correctamente?</em></p>
+          <span class="tag">Cumplir especificación</span>
+        </div>
+        <div class="card teal-card">
+          <h4>Validación (¿Qué?)</h4>
+          <p>Comprueba si el software cumple las expectativas reales del cliente y usuario final. <em>¿Estamos construyendo el producto correcto?</em></p>
+          <span class="tag tag-teal">Satisfacer al cliente</span>
+        </div>
+      </div>
+
+      <h3>Diferencia clave con Testing Estático</h3>
+      <p>El <strong>Testing Estático</strong> se realiza mediante inspecciones, revisiones de código y análisis sin ejecutar el sistema (como buscar variables no usadas). El <strong>Testing Dinámico</strong> requiere obligatoriamente que el software se ejecute para comprobar comportamientos.</p>
+    </section>
+
+    <section id="caja-negra">
+      <h2>2. Técnicas de Caja Negra</h2>
+      <p>Se enfocan puramente en las entradas y salidas, sin mirar el código interno.</p>
+      
+      <h3>2.1 Partición de Equivalencia</h3>
+      <p>Consiste en dividir los datos de entrada en grupos (clases) que se procesan de la misma forma. Solo necesitamos probar un representante de cada grupo.</p>
+      
+      <div class="note">
+        <strong>Caso de Estudio real (V&V.pdf):</strong> Una función <code>validarEdad(int edad)</code> que acepta edades entre <strong>18 y 60 años</strong> inclusive.
+        <ul>
+          <li><strong>Clase Válida:</strong> 18 a 60 (Representante: 25)</li>
+          <li><strong>Clase Inválida Inferior:</strong> menor a 18 (Representante: 15)</li>
+          <li><strong>Clase Inválida Superior:</strong> mayor a 60 (Representante: 65)</li>
+        </ul>
+      </div>
+
+      <h3>2.2 Análisis de Valores Límites</h3>
+      <p>Los programadores solemos equivocarnos en los bordes (confundir <code>&lt;</code> con <code>&lt;=</code>). Por eso probamos los límites exactos:</p>
+      <table>
+        <tr>
+          <th>Punto Crítico</th>
+          <th>Valores a Probar</th>
+          <th>Resultado Esperado</th>
+        </tr>
+        <tr><td>Límite Inferior (18)</td><td>17 (Justo abajo), 18 (Justo en el límite), 19 (Justo arriba)</td><td>17: Inválido | 18, 19: Válido</td></tr>
+        <tr><td>Límite Superior (60)</td><td>59 (Justo abajo), 60 (Justo en el límite), 61 (Justo arriba)</td><td>59, 60: Válido | 61: Inválido</td></tr>
+      </table>
+    </section>
+
+    <section id="caja-blanca">
+      <h2>3. Técnicas de Caja Blanca</h2>
+      <p>Aquí sí abrimos el código y evaluamos su flujo interno.</p>
+
+      <h3>3.1 Criterios de Cubrimiento (Coverages)</h3>
+      <p>Los tres niveles principales que debes saber para estructurar tus casos de prueba:</p>
+      
+      <div class="grid-cards">
+        <div class="card">
+          <h4>1. Cubrimiento de Sentencias/Comandos</h4>
+          <p>Garantiza que cada línea de instrucción de código se ejecute al menos una vez.</p>
+        </div>
+        <div class="card teal-card">
+          <h4>2. Cubrimiento de Decisiones o Ramas</h4>
+          <p>Asegura que cada bifurcación (True / False de cada <code>if</code>) se evalúe por completo.</p>
+        </div>
+        <div class="card">
+          <h4>3. Cubrimiento de Condiciones</h4>
+          <p>Evalúa de forma independiente cada condición lógica simple dentro de un condicional compuesto (ej: <code>edad >= 18 && peso >= 50</code>).</p>
+        </div>
+      </div>
+
+      <h3>3.2 Complejidad Ciclomática (Métrica Esencial)</h3>
+      <p>Es una métrica matemática de software que indica el número de caminos linealmente independientes en un código.</p>
+      <div class="note note-purple">
+        <strong>Fórmula de McCabe:</strong><br>
+        <code>V(G) = E - N + 2</code><br>
+        Donde:<br>
+        • <strong>E</strong> = Número de aristas/flechas (edges) en el grafo de flujo.<br>
+        • <strong>N</strong> = Número de nodos/cajas (nodes) en el grafo de flujo.
+      </div>
+    </section>
+
+    <section id="laboratorio">
+      <h2>🛠️ Laboratorio Interactivo Práctico</h2>
+      <p>Usa estas mini-herramientas programadas especialmente para ayudarte a calcular y verificar de manera visual tus ejercicios de la materia.</p>
+
+      <div class="interactive-tool">
+        <h3>1. Evaluador en Vivo de Edad (Caja Negra)</h3>
+        <p>Introduce una edad para ver a qué partición pertenece y cuál es su salida de acuerdo al ejemplo oficial.</p>
+        <input type="number" id="input-edad" placeholder="Ej: 25">
+        <button onclick="evaluarEdadApp()">Evaluar Edad</button>
+        <div class="tool-output" id="output-edad">Ingresa un valor para calcular...</div>
+      </div>
+
+      <div class="interactive-tool">
+        <h3>2. Calculadora de Complejidad Ciclomática V(G)</h3>
+        <p>Aplica la fórmula de McCabe para tus grafos de control.</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div>
+            <label>Nº de Aristas (E):</label><br>
+            <input type="number" id="num-edges" value="7" style="width:80px;">
+          </div>
+          <div>
+            <label>Nº de Nodos (N):</label><br>
+            <input type="number" id="num-nodes" value="6" style="width:80px;">
+          </div>
+        </div>
+        <button class="secondary" onclick="calcularCiclomatica()">Calcular Complejidad</button>
+        <div class="tool-output" id="output-ciclomatica">V(G) = 7 - 6 + 2 = 3 caminos</div>
+      </div>
+
+      <div class="interactive-tool">
+        <h3>3. Diseñador de Casos de Prueba Estructurado</h3>
+        <p>Rellena los campos y obtén el formato listo para exportar a tus informes de la UG.</p>
+        <div class="grid-cards" style="margin:10px 0;">
+          <div>
+            <label>ID Caso de Prueba:</label>
+            <input type="text" id="cp-id" value="CP-001" style="width:100%;">
+          </div>
+          <div>
+            <label>Objetivo:</label>
+            <input type="text" id="cp-obj" value="Verificar login con datos válidos" style="width:100%;">
+          </div>
+          <div>
+            <label>Datos de Entrada:</label>
+            <input type="text" id="cp-input" value="usuario: admin, clave: Admin123" style="width:100%;">
+          </div>
+          <div>
+            <label>Resultado Esperado:</label>
+            <input type="text" id="cp-output" value="Redirige al Dashboard correctamente" style="width:100%;">
+          </div>
+        </div>
+        <button onclick="generarCasoTabla()">Generar Caso</button>
+        <div id="output-tabla-cp" style="margin-top:15px; overflow-x:auto;"></div>
+      </div>
+    </section>
+
+    <section id="evaluacion">
+      <h2>✏️ Mini-Simulacro de Preparación</h2>
+      <p>Responde a estas preguntas claves extraídas de los conceptos más evaluados del syllabus de V&V:</p>
+
+      <div class="quiz-question" id="q1">
+        <p><strong>1. Si un sistema de salud acepta donantes de sangre entre 18 y 65 años, ¿cuál de las opciones representa una prueba exhaustiva en los límites?</strong></p>
+        <div class="quiz-option" onclick="checkQuiz(this, false, 'q1', 'Incorrecto. Esos son valores de partición comunes, no evalúan rigurosamente los bordes.')">A) 20, 40, 60</div>
+        <div class="quiz-option" onclick="checkQuiz(this, true, 'q1', '¡Correcto, Danna! Esos prueban justo abajo, en, y sobre el límite inferior (18) y superior (65).')">B) 17, 18, 19, 64, 65, 66</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false, 'q1', 'Incorrecto. 0 y 100 están demasiado lejos de los límites críticos reales.')">C) 0, 18, 65, 100</div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-question" id="q2">
+        <p><strong>2. ¿Qué métrica de control evalúa el número de caminos linealmente independientes dentro de un programa?</strong></p>
+        <div class="quiz-option" onclick="checkQuiz(this, false, 'q2', 'Incorrecto. El cubrimiento de líneas solo cuenta qué porcentaje del código se ejecutó.')">A) Cubrimiento de sentencias</div>
+        <div class="quiz-option" onclick="checkQuiz(this, true, 'q2', '¡Excelente! La Complejidad Ciclomática de McCabe define los caminos independientes.')">B) Complejidad Ciclomática</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false, 'q2', 'Incorrecto. El análisis estático no se asocia directamente a los caminos lógicos dinámicos.')">C) Análisis Estático de flujo</div>
+        <div class="feedback-msg"></div>
+      </div>
+
+      <div class="quiz-question" id="q3">
+        <p><strong>3. ¿Cuál es el objetivo principal de la verificación de software?</strong></p>
+        <div class="quiz-option" onclick="checkQuiz(this, true, 'q3', '¡Exacto! Asegura el cumplimiento con los requisitos especificados (construir el producto correctamente).')">A) Comprobar si el producto se construye según las especificaciones técnicas</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false, 'q3', 'Incorrecto. Eso corresponde a la validación frente a las necesidades del usuario.')">B) Garantizar que el usuario se sienta a gusto con el producto</div>
+        <div class="quiz-option" onclick="checkQuiz(this, false, 'q3', 'Incorrecto. Encontrar bugs es una actividad del testing, pero la verificación abarca la conformidad contractual y de diseño.')">C) Únicamente depurar errores de sintaxis</div>
+        <div class="feedback-msg"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>💡 Tarjetas de Repaso Rápido (Active Recall)</h2>
+      <p>Haz clic sobre la tarjeta morada para revelar el concepto oculto en el reverso. ¡Una técnica de estudio top para memorizar rápido!</p>
+      
+      <div class="flashcards-container">
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <h3>¿Qué es una Caja Negra?</h3>
+              <p style="margin-top:15px; font-size:0.85rem; opacity:0.8;">(Haz clic para voltear)</p>
+            </div>
+            <div class="flashcard-back">
+              <h3>Respuesta</h3>
+              <p>Pruebas basadas únicamente en entradas y salidas funcionales sin conocer la implementación interna del código.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>💡 Hecho con 💜 para Danna Vera · Futura Ingeniera de Software de la Universidad de Guayaquil</p>
+  <p style="font-size:0.8rem; margin-top:5px; opacity:0.7;">¡La constancia y el esfuerzo siempre dan sus frutos! "Life Goes On" 🌟</p>
+</footer>
+
+<script>
+// Barra de Progreso Dinámica
+window.onscroll = function() {
+  let winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+  let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  let scrolled = (winScroll / height) * 100;
+  document.getElementById("bar").style.width = scrolled + "%";
+  document.getElementById("pct").innerText = Math.round(scrolled) + "%";
+};
+
+// Buscador
+const searchInput = document.getElementById("search");
+searchInput.addEventListener("input", function() {
+  const filter = searchInput.value.toLowerCase();
+  const sections = document.querySelectorAll("main section");
+  sections.forEach(sec => {
+    const text = sec.innerText.toLowerCase();
+    sec.style.display = text.includes(filter) ? "block" : "none";
+  });
+});
+
+// Resaltador de menú lateral
+const links = document.querySelectorAll("nav a");
+links.forEach(link => {
+  link.addEventListener("click", function() {
+    links.forEach(l => l.classList.remove("active"));
+    this.classList.add("active");
+  });
+});
+
+// Evaluador Edad
+function evaluarEdadApp() {
+  const edad = parseInt(document.getElementById("input-edad").value);
+  const output = document.getElementById("output-edad");
+  if (isNaN(edad)) {
+    output.innerText = "Por favor, ingresa un número válido.";
+    output.style.color = "var(--bad)";
+    return;
+  }
+  
+  if (edad < 18) {
+    output.innerHTML = `❌ Edad: <strong>${edad}</strong>. Pertenece a la <strong>Partición Inválida Inferior</strong>. El sistema debe rechazar el acceso.`;
+    output.style.color = "var(--bad)";
+  } else if (edad >= 18 && edad <= 60) {
+    output.innerHTML = `✅ Edad: <strong>${edad}</strong>. Pertenece a la <strong>Partición Válida</strong>. El sistema autoriza el registro exitosamente.`;
+    output.style.color = "var(--ok)";
+  } else {
+    output.innerHTML = `❌ Edad: <strong>${edad}</strong>. Pertenece a la <strong>Partición Inválida Superior</strong>. El sistema debe denegar el acceso.`;
+    output.style.color = "var(--bad)";
+  }
+}
+
+// Calculadora Ciclomática
+function calcularCiclomatica() {
+  const E = parseInt(document.getElementById("num-edges").value);
+  const N = parseInt(document.getElementById("num-nodes").value);
+  const output = document.getElementById("output-ciclomatica");
+  
+  if (isNaN(E) || isNaN(N)) {
+    output.innerText = "Ingresa números válidos para aristas y nodos.";
+    return;
+  }
+  const V = E - N + 2;
+  output.innerHTML = `Fórmula: V(G) = ${E} - ${N} + 2 = <strong>${V} caminos lógicos</strong>. Se requieren al menos ${V} casos de prueba independientes.`;
+}
+
+// Generador Caso de Prueba
+function generarCasoTabla() {
+  const id = document.getElementById("cp-id").value;
+  const obj = document.getElementById("cp-obj").value;
+  const input = document.getElementById("cp-input").value;
+  const out = document.getElementById("cp-output").value;
+  const outputDiv = document.getElementById("output-tabla-cp");
+  
+  outputDiv.innerHTML = `
+    <table>
+      <tr><th>Campo</th><th>Detalle</th></tr>
+      <tr><td><strong>ID del Caso</strong></td><td><code>${id}</code></td></tr>
+      <tr><td><strong>Objetivo</strong></td><td>${obj}</td></tr>
+      <tr><td><strong>Datos de Entrada</strong></td><td><code>${input}</code></td></tr>
+      <tr><td><strong>Resultado Esperado</strong></td><td>${out}</td></tr>
+    </table>
+  `;
+}
+
+// Lógica de Quiz interactivo
+function checkQuiz(element, isCorrect, qId, feedback) {
+  const parent = document.getElementById(qId);
+  const options = parent.querySelectorAll(".quiz-option");
+  const feedbackDiv = parent.querySelector(".feedback-msg");
+  
+  options.forEach(opt => {
+    opt.onclick = null; // Desactivar clics después de responder
+    opt.style.opacity = "0.7";
+  });
+  
+  element.style.opacity = "1";
+  if (isCorrect) {
+    element.classList.add("correct");
+    feedbackDiv.style.color = "var(--ok)";
+    feedbackDiv.innerHTML = "🎉 " + feedback;
+  } else {
+    element.classList.add("incorrect");
+    feedbackDiv.style.color = "var(--bad)";
+    feedbackDiv.innerHTML = "❌ " + feedback;
+    // Resaltar la correcta
+    options.forEach(opt => {
+      if (opt.innerText.includes("B)") || opt.innerText.includes("A)") && qId === 'q3') {
+        opt.classList.add("correct");
+        opt.style.opacity = "1";
+      }
+    });
+  }
+  feedbackDiv.style.display = "block";
+}
+</script>
+</body>
+</html>
